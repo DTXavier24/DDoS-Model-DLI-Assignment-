@@ -253,3 +253,28 @@ X = data_np[:, 0:28]
 enc = OneHotEncoder()
 
 Y = enc.fit_transform(data_np[:,29:]).toarray()
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# First split: Train + Temp (Val+Test)
+X_train, X_temp, Y_train, Y_temp = train_test_split(
+    X_scaled, Y, test_size=0.3, random_state=2, shuffle=True, stratify=Y.argmax(axis=1)
+)
+
+# Second split: Validation + Test
+X_val, X_test, Y_val, Y_test = train_test_split(
+    X_temp, Y_temp, test_size=0.5, random_state=2, shuffle=True, stratify=Y_temp.argmax(axis=1)
+)
+
+# Reshape for Conv1D
+X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], 1).astype('float32')
+X_val   = X_val.reshape(X_val.shape[0], X_val.shape[1], 1).astype('float32')
+X_test  = X_test.reshape(X_test.shape[0], X_test.shape[1], 1).astype('float32')
+
+_features = X.shape[1]
+n_classes = Y.shape[1]
+
+data = df.iloc[:,1:-1]
+
+
