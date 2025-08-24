@@ -276,5 +276,13 @@ _features = X.shape[1]
 n_classes = Y.shape[1]
 
 data = df.iloc[:,1:-1]
+from sklearn.preprocessing import LabelEncoder
+label_encoder = LabelEncoder()
+data.iloc[:,0] = label_encoder.fit_transform(data.iloc[:,0]).astype('float64')
+corr = data.corr()
 
+import seaborn as sns
+
+sns.set(rc = {'figure.figsize':(15,10)})
+sns.heatmap(corr)
 
