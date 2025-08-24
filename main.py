@@ -501,3 +501,12 @@ def evaluate_model(model, X_test, y_test, class_names=None):
     })
 
     return report_df, summary
+class_names = ["BFA", "BOTNET", "DDOS", "DOS", "NORMAL", "PROBE", "U2R", "WEB_ATTACK"]
+
+report_df, summary = evaluate_model(model, X_test, y_test, class_names=class_names)
+
+print("\nClassification Report:")
+display(report_df)
+
+print("\nSummary Table:")
+display(summary)
