@@ -195,4 +195,22 @@ data_clean['Label'].value_counts()
 
 print("Read {} rows.".format(len(data_clean)))
 
+# Remove columns with only values of 0
+# List of columns you want to keep
+useful_columns = ['Protocol', 'Flow Duration', 'Fwd Act Data Pkts', 'Fwd Pkts/s', 'Pkt Len Min', 'Flow IAT Min', 'Flow IAT Mean', 'Bwd IAT Mean', 'Tot Fwd Pkts', 'Fwd IAT Tot', 'Flow IAT Std', 'Bwd IAT Std', 'Bwd IAT Min', 'Pkt Len Mean', 'Fwd PSH Flags', 'Fwd Seg Size Avg', 'Pkt Len Var', 'Bwd Pkts/s', 'Bwd Header Len', 'TotLen Fwd Pkts', 'FIN Flag Cnt', 'Fwd Pkt Len Std', 'Pkt Len Std', 'Bwd Pkt Len Min', 'Subflow Fwd Byts', 'Tot Bwd Pkts', 'RST Flag Cnt', 'Bwd Seg Size Avg','Label']
 
+# Keep only those columns
+df = df[useful_columns]
+
+print('After keeping some columns: \n\t there are {} columns and {} rows'.format(len(df.columns), len(df)))
+
+
+#features = df.columns
+
+
+
+# Remove columns with only values of 0
+#useless_columns = ['Flow ID', 'Timestamp', 'Src IP', 'Dst IP', 'Src Port', 'Dst Port']
+#df.drop(labels=useless_columns, axis='columns', inplace=True)
+#print('After dropping some columns: \n\t there are {} columns and {} rows'.format(len(df.columns), len(df)))
+#features = df.columns
