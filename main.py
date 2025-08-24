@@ -139,108 +139,27 @@ metadata = ['Flow ID',
 ]
 df.columns = metadata
 
-# =============================
-# Data Preprocessing and Removing NA Column (Wei Bin)
-# =============================
-import time
-from sklearn.ensemble import RandomForestClassifier
+from scipy.stats import zscore
 
-def preprocess_data(df):
-    print("\n Preprocessing data...")
+def expand_categories(values):
+    result = []
+    s = values.value_counts()
+    t = float(len(values))
+    for v in s.index:
+        result.append("{}:{}%".format(v,round(100*(s[v]/t),2)))
+    return "[{}]".format(",".join(result))
 
-    X = df.drop("Label", axis=1)
-    y = df["Label"]
+def analyze(df):
+    print()
+    cols = df.columns.values
+    total = float(len(df))
 
-    X = X.fillna(0)
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3, random_state=42, stratify=y
-    )
-
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
-
-    print(f" Preprocessing complete. Train shape: {X_train.shape}, Test shape: {X_test.shape}")
-    return X_train, X_test, y_train, y_test
-
-X_train, X_test, y_train, y_test = preprocess_data(df)
-
-# =============================
-# Model Training with Random Forest (Wei Bin)
-# =============================
-def train_model(X_train, y_train):
-    print("Training Random Forest...")
-    start_time = time.time()
-
-    model = RandomForestClassifier(
-        n_estimators=500,     # more trees → higher stability
-        max_depth=60,         # deeper trees for capturing patterns
-        max_features="sqrt",  # good balance for splits
-        min_samples_split=2,  # allow deep branching
-        min_samples_leaf=1,   # fine-grained splits
-        class_weight="balanced_subsample",  # handle class imbalance better
-        bootstrap=True,       # classic RF bootstrapping
-        random_state=42,
-        n_jobs=-1             # use all CPU cores
-    )
-    model.fit(X_train, y_train)
-
-    duration = time.time() - start_time
-    print(f" Training complete in {duration:.2f} seconds")
-    return model
-
-# Train model
-model = train_model(X_train, y_train)
-
-# =============================
-# Model Evaluation and Accuracy + F1 score percentage (Wei Bin)
-# =============================
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, f1_score
-
-def evaluate_model(model, X_test, y_test, class_names=None):
-    print("Evaluating model...")
-
-    # Predictions
-    y_pred = model.predict(X_test)
-
-    # Accuracy & F1
-    acc = accuracy_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred, average="weighted")
-
-    # Classification report (converted to DataFrame)
-    report = classification_report(y_test, y_pred, output_dict=True)
-    report_df = pd.DataFrame(report).transpose()
-
-    # Confusion matrix
-    cm = confusion_matrix(y_test, y_pred, labels=class_names)
-
-    # Plot heatmap
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
-                xticklabels=class_names, yticklabels=class_names)
-    plt.xlabel("Predicted")
-    plt.ylabel("Actual")
-    plt.title("Confusion Matrix Heatmap")
-    plt.show()
-
-    # Summary metrics
-    summary = pd.DataFrame({
-        "Metric": ["Accuracy", "F1 Score"],
-        "Score": [acc, f1]
-    })
-
-    return report_df, summary
-
-class_names = ["BFA", "BOTNET", "DDOS", "DOS", "NORMAL", "PROBE", "U2R", "WEB_ATTACK"]
-
-report_df, summary = evaluate_model(model, X_test, y_test, class_names=class_names)
-
-print("\nClassification Report:")
-display(report_df)
-
-print("\nSummary Table:")
-display(summary)
+    print("{} rows".format(int(total)))
+    for col in cols:
+        uniques = df[col].unique()
+        unique_count = len(uniques)
+        if unique_count>100:
+            print("** {}:{} ({}%)".format(col,unique_count,int(((unique_count)/total)*100)))
+        else:
+            print("** {}:{}".format(col,expand_categories(df[col])))
+            expand_categories(df[col])
