@@ -184,3 +184,15 @@ plt.ylabel('Data points per Class')
 plt.title('Distribution of InSDN Training Data Before Cleaning')
 plt.grid()
 plt.show()
+
+#drop na values and reset index
+data_clean = df.dropna().reset_index()
+
+# Checkng for DUPLICATE values
+data_clean.drop_duplicates(keep='first', inplace = True)
+
+data_clean['Label'].value_counts()
+
+print("Read {} rows.".format(len(data_clean)))
+
+
