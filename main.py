@@ -174,6 +174,12 @@ fig, ax = plt.subplots(figsize=(20,20))
 class_distribution = df['Label'].value_counts()
 class_distribution.plot(kind='bar')
 plt.xlabel('Class')
+
+# Before Cleaning Data set for Duplicate
+sorted_ds = np.argsort(-class_distribution.values)
+for i in sorted_ds:
+    print('Number of data points in class', class_distribution.index[i],':', class_distribution.values[i],
+          '(', np.round((class_distribution.values[i]/df.shape[0]*100), 3), '%)')
 plt.ylabel('Data points per Class')
 plt.title('Distribution of InSDN Training Data Before Cleaning')
 plt.grid()
