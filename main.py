@@ -163,3 +163,18 @@ def analyze(df):
         else:
             print("** {}:{}".format(col,expand_categories(df[col])))
             expand_categories(df[col])
+
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import *
+
+plt.figure(figsize=(20,20))
+
+fig, ax = plt.subplots(figsize=(20,20))
+
+class_distribution = df['Label'].value_counts()
+class_distribution.plot(kind='bar')
+plt.xlabel('Class')
+plt.ylabel('Data points per Class')
+plt.title('Distribution of InSDN Training Data Before Cleaning')
+plt.grid()
+plt.show()
