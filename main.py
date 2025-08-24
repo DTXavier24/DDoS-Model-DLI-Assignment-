@@ -378,3 +378,6 @@ loss_values = history_dict['loss']
 val_loss_values = history_dict['val_loss']
 acc = history_dict['accuracy']
 val_acc = history_dict['val_accuracy']
+
+start_by_epoch = 1
+epochs = range(start_by_epoch, len(loss_values) + 1)
