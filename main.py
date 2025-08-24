@@ -341,4 +341,33 @@ history = model.fit(
     callbacks=[early_stop, reduce_lr],
     verbose=1
 )
-#model.save('/content/drive/My Drive/DLI Assignment/model_cnn.h5')
+model.save('/content/drive/My Drive/DLI Assignment/model_cnn.h5')
+
+import datetime as dt
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score, roc_auc_score
+from sklearn import preprocessing
+
+escore = model.evaluate(X_test, Y_test, batch_size=32)
+pred = model.predict(X_test)
+pred = np.argmax(pred,axis=1)
+y_eval = np.argmax(Y_test,axis=1)
+
+score = metrics.accuracy_score(y_eval, pred)
+rscore = recall_score(y_eval, pred, average='weighted')
+ascore = precision_score(y_eval, pred, average='weighted')
+f1score= f1_score(y_eval, pred, average='weighted') #F1 = 2 * (precision * recall) / (precision + recall) for manual
+
+lb = preprocessing.LabelBinarizer()
+lb.fit(y_eval)
+y_eval = lb.transform(y_eval)
+pred = lb.transform(pred)
+roc_score = roc_auc_score(y_eval, pred)
+#roc_auc_socre = multiclass_roc_auc_score(y_eval, pred)
+
+
+print("Validation score: {}".format(score))
+print("Evaluation score: {}".format(escore))
+print("Recall score: {}".format(rscore))
+print("Precision score: {}".format(ascore))
+print("F1 Measure score: {}".format(f1score))
+print("ROC-AUC score: {}".format(roc_score))
