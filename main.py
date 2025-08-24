@@ -286,3 +286,58 @@ import seaborn as sns
 sns.set(rc = {'figure.figsize':(15,10)})
 sns.heatmap(corr)
 
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from keras.models import Sequential
+from keras.layers import Dense, Activation, Flatten, Conv1D, Dropout, MaxPooling1D
+from tensorflow import keras
+import warnings
+
+model = Sequential([
+    Conv1D(64, kernel_size=3, activation='relu', input_shape=(_features, 1)),
+    MaxPooling1D(pool_size=2),
+
+    Conv1D(128, kernel_size=3, activation='relu'),
+    MaxPooling1D(pool_size=2),
+
+    Conv1D(64, kernel_size=3, activation='relu'),
+    MaxPooling1D(pool_size=2),
+
+    Flatten(),
+    Dense(256, activation='relu'), Dropout(0.2),
+    Dense(128, activation='relu'), Dropout(0.2),
+    Dense(96, activation='relu'), Dropout(0.2),
+    Dense(n_classes, activation='softmax')
+])
+
+model.summary()
+
+# =========================
+# 3. Compile
+# =========================
+opt = keras.optimizers.Adam(learning_rate=1e-3)  # Faster training vs 1e-4
+model.compile(loss='categorical_crossentropy',
+              optimizer=opt,
+              metrics=['accuracy'])
+
+# =========================
+# 4. Callbacks
+# =========================
+early_stop = keras.callbacks.EarlyStopping(
+    monitor='val_loss', patience=5, restore_best_weights=True
+)
+reduce_lr = keras.callbacks.ReduceLROnPlateau(
+    monitor='val_loss', factor=0.5, patience=3, min_lr=1e-5
+)
+
+# =========================
+# 5. Train
+# =========================
+history = model.fit(
+    X_train, Y_train,
+    batch_size=128,
+    epochs=50,
+    validation_data=(X_val, Y_val),
+    callbacks=[early_stop, reduce_lr],
+    verbose=1
+)
