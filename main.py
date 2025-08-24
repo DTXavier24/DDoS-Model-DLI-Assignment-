@@ -381,3 +381,18 @@ val_acc = history_dict['val_accuracy']
 
 start_by_epoch = 1
 epochs = range(start_by_epoch, len(loss_values) + 1)
+
+import time
+
+# Measure inference time
+start_time = time.time()
+pred = model.predict(X_test)
+end_time = time.time()
+
+inference_time = end_time - start_time
+print("Inference time: {:.2f} seconds".format(inference_time))
+
+
+
+pred = np.argmax(pred,axis=1)
+y_test = Y_test.argmax(axis=1)
