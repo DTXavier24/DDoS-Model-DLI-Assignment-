@@ -371,3 +371,10 @@ print("Recall score: {}".format(rscore))
 print("Precision score: {}".format(ascore))
 print("F1 Measure score: {}".format(f1score))
 print("ROC-AUC score: {}".format(roc_score))
+
+# Plot for training and validation loss
+history_dict = history.history
+loss_values = history_dict['loss']
+val_loss_values = history_dict['val_loss']
+acc = history_dict['accuracy']
+val_acc = history_dict['val_accuracy']
