@@ -230,3 +230,26 @@ dummies = pd.get_dummies(df['Label']) # Classification
 outcomes = dummies.columns
 num_classes = len(outcomes)
 y = dummies.values
+
+#data preprocessing 
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder
+#drop na values and reset index
+data_clean = df.dropna().reset_index()
+
+# label encoding
+labelencoder = LabelEncoder()
+data_clean['Label'] = labelencoder.fit_transform(data_clean['Label'])
+
+data_clean['Label'].value_counts()
+
+data_np = data_clean.to_numpy(dtype="float32")
+data_np = data_np[~np.isinf(data_np).any(axis=1)]
+
+#del df
+
+X = data_np[:, 0:28]
+
+enc = OneHotEncoder()
+
+Y = enc.fit_transform(data_np[:,29:]).toarray()
