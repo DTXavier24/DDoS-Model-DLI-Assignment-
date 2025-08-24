@@ -341,3 +341,4 @@ history = model.fit(
     callbacks=[early_stop, reduce_lr],
     verbose=1
 )
+#model.save('/content/drive/My Drive/DLI Assignment/model_cnn.h5')
