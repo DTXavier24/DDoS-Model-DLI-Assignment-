@@ -39,3 +39,15 @@ from keras.layers import Input
 from keras.models import Model
 
 from tensorflow.keras.utils import plot_model
+
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+Dataset1 = pd.read_csv('/content/drive/My Drive/DLI Assignment/Normal_data.csv')
+Dataset2 = pd.read_csv('/content/drive/My Drive/DLI Assignment/OVS.csv')
+Dataset3 = pd.read_csv('/content/drive/My Drive/DLI Assignment/metasploitable-2.csv')
+
+df = pd.concat([Dataset1, Dataset2, Dataset3], axis=0, ignore_index=True)
+
+print("Finisehd reading in {} entires".format(str(df.shape[0])))
