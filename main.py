@@ -138,3 +138,30 @@ metadata = ['Flow ID',
 'Label'
 ]
 df.columns = metadata
+
+# =============================
+# Data Preprocessing and Removing NA Column (Wei Bin)
+# =============================
+import time
+from sklearn.ensemble import RandomForestClassifier
+
+def preprocess_data(df):
+    print("\n Preprocessing data...")
+
+    X = df.drop("Label", axis=1)
+    y = df["Label"]
+
+    X = X.fillna(0)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=42, stratify=y
+    )
+
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    print(f" Preprocessing complete. Train shape: {X_train.shape}, Test shape: {X_test.shape}")
+    return X_train, X_test, y_train, y_test
+
+X_train, X_test, y_train, y_test = preprocess_data(df)
