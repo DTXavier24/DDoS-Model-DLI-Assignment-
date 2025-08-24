@@ -223,3 +223,10 @@ for i in sorted_ds:
     print('Number of data points in class', class_distribution.index[i],':', class_distribution.values[i],
           '(', np.round((class_distribution.values[i]/df.shape[0]*100), 3), '%)')
     
+    # Convert to numpy - Classification
+x_columns = df.columns.drop('Label')
+x = df[x_columns].values
+dummies = pd.get_dummies(df['Label']) # Classification
+outcomes = dummies.columns
+num_classes = len(outcomes)
+y = dummies.values
