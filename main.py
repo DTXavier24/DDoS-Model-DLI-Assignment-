@@ -404,3 +404,16 @@ import seaborn as sn
 
 confMat = confusion_matrix(y_test, pred)
 confMat
+cm_df = pd.DataFrame(confMat)
+
+labels = ['DDoS','Probe','Normal','DoS','BFA','Web-Attack','BOTNET','U2R']
+
+plt.figure(figsize=(20,15))
+sn.set(font_scale=1.4)
+sn.heatmap(cm_df, annot=True, annot_kws={"size":12}, fmt='g', xticklabels=labels, yticklabels=labels, cmap='Blues')
+
+#sn.heatmap(cm_df, annot=True, annot_kws={"size":12}, fmt='g', xticklabels=labels, yticklabels=labels)
+plt.ylabel('Actual Class')
+plt.xlabel('Predicted Class')
+
+plt.show()
