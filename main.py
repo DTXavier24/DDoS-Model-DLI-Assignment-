@@ -214,3 +214,11 @@ print('After keeping some columns: \n\t there are {} columns and {} rows'.format
 #df.drop(labels=useless_columns, axis='columns', inplace=True)
 #print('After dropping some columns: \n\t there are {} columns and {} rows'.format(len(df.columns), len(df)))
 #features = df.columns
+
+
+
+# After Cleaning Data set for Duplicate
+sorted_ds = np.argsort(-class_distribution.values)
+for i in sorted_ds:
+    print('Number of data points in class', class_distribution.index[i],':', class_distribution.values[i],
+          '(', np.round((class_distribution.values[i]/df.shape[0]*100), 3), '%)')
