@@ -396,3 +396,11 @@ print("Inference time: {:.2f} seconds".format(inference_time))
 
 pred = np.argmax(pred,axis=1)
 y_test = Y_test.argmax(axis=1)
+
+pred.shape
+y_test.shape
+from sklearn.metrics import confusion_matrix, precision_score, recall_score
+import seaborn as sn
+
+confMat = confusion_matrix(y_test, pred)
+confMat
